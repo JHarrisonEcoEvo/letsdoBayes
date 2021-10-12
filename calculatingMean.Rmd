@@ -105,6 +105,8 @@ model {
   mu ~ normal(2, 1);
   sigma ~ exponential(1);
 }
+
+
 ```
 This is not R code. While some things may look familiar (like the for loop) other stuff is different. Notably this code is turned into C++ code and compiled, it is not run sequentially like R. This is Stan code and is in a text file on my computer called calcMeanNoLog.stan (as labeled "output.var" in the code chunk). If you want to run this, then you will need to paste this code into a file and change the path to that file in the R markdown accordingly. Pasting this code directly into your R session will not work. 
 
