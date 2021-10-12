@@ -106,7 +106,7 @@ model {
   sigma ~ exponential(1);
 }
 ```
-This is not R code. While some things may look familiar (like the for loop) other stuff is different. Notably this code is turned into C++ code and compiled, it is not run sequentially like R. This is Stan code and is in a text file on my computer called calcMean.stan. If you want to run this, then you will need to paste this code into a file and change the path to that file in the R markdown accordingly. Pasting this code directly into your R session will not work. 
+This is not R code. While some things may look familiar (like the for loop) other stuff is different. Notably this code is turned into C++ code and compiled, it is not run sequentially like R. This is Stan code and is in a text file on my computer called calcMeanNoLog.stan (as labeled "output.var" in the code chunk). If you want to run this, then you will need to paste this code into a file and change the path to that file in the R markdown accordingly. Pasting this code directly into your R session will not work. 
 
 You will notice that there are three bracketed sections. One for data, one for parameters, and one for model. Let's start with model because the other two sections just specify the nature of our variables that we use in the model. 
 
@@ -122,7 +122,9 @@ Stan also makes you declare your variables (C does this, R and Python do not). T
 
 We do the same thing for the parameters of our model, which are mu and sigma. We make both of them real numbers and stick a lower bound on sigma, since we don't want to have negative variance. 
 
-Stan files need to end in a blank line. As per usual, be wary of formatting (have semicolons to end lines, etc.). Find examples online and crib their syntax. Stan gives pretty good error messages most of the time, but various compiler errors can be cryptic. For a brand new model, be prepared to debug a bit.
+Stan files need to end in a blank line! 
+
+As per usual, be wary of formatting (have semicolons to end lines, etc.). Find examples online and crib their syntax. Stan gives pretty good error messages most of the time, but various compiler errors can be cryptic. For a brand new model, be prepared to debug a bit.
 
 Next, we compile the model and make it callable from within R, using "stan_model" an rstan function.
 ```{r}
@@ -140,7 +142,7 @@ fitstan_HMC <- sampling(model,
                         seed = 123,
                         verbose = T)
 ```
-Quick explanation of the call to the rstan::sampling() function: chains are the number of Monte Carlo chains that we run (more below), warmup is the number of samples we do before we start keeping track of the samples. iter is the *total* number of samples we do, so subtract warmup for this for how many samples we actually retain. cores is how many cpus we use. Seed is our random number seed (set this for reproducible results). Verbose means the software prints a bunch of stuff to the screen so we can see what is happening.
+Quick explanation of the call to the rstan::sampling() function: chains are the number of Monte Carlo chains that we run (more below), warmup is the number of samples we do before we start keeping track of the samples. iter is the *total* number of samples we do, so subtract warmup for this for how many samples we actually retain. cores is how many cpus we use. Seed is our random number seed (set this for reproducible results). Verbose means the software prints a bunch of stuff to the screen so we can see what is happening. Important, the data have to be passed in as a named list.
 
 So what are these things called samples and chains? Samples are the values suggested by Stan for the parameters of interest for our model. What happens when Stan does its thing is it picks values for all model parameters with probability defined by the distributions we specified in the model, substitutes these values into the model, and calculates the posterior. It then picks some new values and does this over and over. A bunch of these samples together make up a chain. There are different tools that Stan can use to pick samples, these are referred to as sampling algorithms and include: Metropolis, Metropolis-Hastings, Gibbs, and Hamiltonian Monte Carlo. It is beyond the scope of this tutorial to go into these, but if you do much Bayesian modeling you will want to get a high-level intuition (at least) of how these work, as well as alternative methods like variational inference. For now, we will just use the default sampler. 
 

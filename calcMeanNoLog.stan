@@ -20,3 +20,4 @@ model {
   mu ~ normal(2, 1);
   sigma ~ exponential(1);
 }
+
