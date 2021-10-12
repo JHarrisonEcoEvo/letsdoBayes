@@ -1,16 +1,22 @@
+//https://vasishth.github.io/bayescogsci/book/sec-firststan.html
+//http://hedibert.org/wp-content/uploads/2021/02/stan-rstan-examples.html
 data {
-  int n;
-  real y[n];
+  int n;                 // number of observations
+  real y[n];             // simulated data       
 }
 
 parameters {
-  real mu;
-  real<lower=0> sigma;
+  real mu;               // mean
+  real<lower=0> sigma;   // standard deviation
 }
 
 model {
-  for (i in 1:n)
-   y[i] ~ normal(mu,sigma);
-  mu ~ normal(1.7,0.3);
-  sigma ~ normal(0,1);
+  // likelihood
+  for(i in 1:n) {
+    y[i] ~ normal(mu,sigma);
+  }  
+  
+  // priors
+  mu ~ normal(2, 1);
+  sigma ~ exponential(1);
 }
