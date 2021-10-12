@@ -1,6 +1,7 @@
 ---
 title: "How do we do Bayes: a really brief primer"
 output: html_document
+author: Joshua Harrison, Andrew Seifert, with input from Eryn McFarlane and Christopher Weiss-Lehman
 ---
 
 ```{r setup, include=FALSE}
